@@ -1,0 +1,11 @@
+{
+  "name": "Roomle transparency demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "author": "",
+  "homepage": "roomle-dev.github.io/transparency",
+  "scripts": {
+    "build": "rm -r dist && mkdir dist && unzip transparency-build.zip -d dist"
+  }
+}

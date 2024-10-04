@@ -1,0 +1,26 @@
+{
+  "name": "roomle-dev.github.io",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "author": "",
+  "homepage": "https://github.com/roomle-dev/roomle-dev.github.io#readme",
+  "scripts": {
+    "new": "npm create vite@latest",
+    "build:all": "node build-all.js",
+    "build:deploy": "npm run build:all && deploy",
+    "deploy": "gh-pages -e out"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roomle-dev/roomle-dev.github.io.git"
+  },
+  "workspaces": [
+    "transparency"
+  ],
+  "devDependencies": {
+    "create-vite": "^5.5.3",
+    "gh-pages": "^6.1.1",
+    "vite": "^5.4.8"
+  }
+}
