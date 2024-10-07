@@ -2,17 +2,18 @@ const fs = require('fs').promises;
 const path = require('path');
 const { execSync } = require('child_process');
 
+const ignoreFolders = ['node_modules', '.git', 'out', '.vscode', '.idea'];
+
 async function buildProjects() {
     try {
         // Get all directories in the current folder
         const entries = await fs.readdir('.', { withFileTypes: true });
-        const dirs = entries.filter(entry => entry.isDirectory() && entry.name !== 'node_modules');
+        const dirs = entries.filter(entry => entry.isDirectory() && !ignoreFolders.includes(entry.name));
 
         // Create the 'out' directory if it doesn't exist
         await fs.mkdir('out', { recursive: true });
 
         for (const dir of dirs) {
-            console.log(dir);
             const projectPath = path.join('.', dir.name);
             const packageJsonPath = path.join(projectPath, 'package.json');
 

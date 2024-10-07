@@ -8,8 +8,8 @@
   "scripts": {
     "new": "npm create vite@latest",
     "build:all": "node build-all.js",
-    "build:deploy": "npm run build:all && deploy",
-    "deploy": "gh-pages -e out"
+    "build:deploy": "npm run build:all && npm run deploy",
+    "deploy": "gh-pages -d out"
   },
   "repository": {
     "type": "git",
