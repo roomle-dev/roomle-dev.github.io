@@ -8,15 +8,17 @@ Each subfolder in this directory acts as a page, for example the `transparency` 
 
 #### Dependencies
 
-Installing dependencies via `npm install` will install dependencies for all subprojects because this repo is treated as a monorepo with `workspaces` in package.json.
+> [!IMPORTANT]
+> Installing dependencies via `npm install` will install dependencies for all subprojects because this repo is treated as a monorepo with `workspaces` in package.json.
 
-#### Creating a new project
-
-> npm run new
+### Creating a new project
+```bash
+npm run new
+```
 
 This will run the vite setup, so you can quickly scaffold a new project to add to this GitHub pages page.
 
-#### Building
+### Building
 
 As long as your project has a `build` command in its `package.json` the `build-all.js` script will build projects in the folders immediately adjacent to the root `package.json` (one level deep).
 
@@ -33,15 +35,18 @@ export default defineConfig({
 });
 ```
 
-#### Deploying
+### Deploying
 
 The `deploy` scripts will upload all the files in the `out` folder generated after building to GitHub pages, it may take a minute or two for the changes to go live.
 
-> npm run build:deploy
-
+```bash
+npm run build:deploy
+```
 Builds all projects and deploys it.
 
-> npm run deploy
+```bash
+npm run deploy
+```
 
 Deploys without building everything first.
 
