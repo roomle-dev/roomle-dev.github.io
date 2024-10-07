@@ -2,7 +2,7 @@
 
 General purpose repo for hosting development related pages/demos.
 
-Each subfolder in this directory acts as a page, for example the `transparency` folder will be accessible via https://roomle-dev.github.io/transparency, nested pages currently don't work.
+Each subfolder in this directory acts as a page, for example the `transparency` folder will be accessible via [https://roomle-dev.github.io/transparency](https://roomle-dev.github.io/transparency/?transparentBackground=true&moc=true&edit=true&id=86qux3bxbgv615qxzby3k2q4a4oni7o&customApiUrl=https://api.roomle.com/v2), nested pages currently don't work.
 
 ### Developing
 
