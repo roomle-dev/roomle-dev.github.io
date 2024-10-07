@@ -16,7 +16,8 @@
     "url": "git+https://github.com/roomle-dev/roomle-dev.github.io.git"
   },
   "workspaces": [
-    "transparency"
+    "transparency",
+    "tc-export-demo"
   ],
   "devDependencies": {
     "create-vite": "^5.5.3",
