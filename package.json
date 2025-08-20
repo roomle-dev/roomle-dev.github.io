@@ -17,7 +17,8 @@
   },
   "workspaces": [
     "transparency",
-    "tc-export-demo"
+    "tc-export-demo",
+    "nobilia-web-sdk-demo"
   ],
   "devDependencies": {
     "create-vite": "^5.5.3",
