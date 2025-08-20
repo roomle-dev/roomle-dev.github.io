@@ -55,7 +55,7 @@ const startRoomlePlanner = async () => {
       'load-idb-config': false,
       'stop-configure-hint': false,
     },
-    overrideServerUrl: 'http://roomle.com/t/cp-internal',
+    overrideServerUrl: 'https://roomle.com/t/cp-internal',
     catalogRootTag: createExtObjId(FAKE_ROOT_TAG),
     featureFlags: {
       globalCallbacks: false,
