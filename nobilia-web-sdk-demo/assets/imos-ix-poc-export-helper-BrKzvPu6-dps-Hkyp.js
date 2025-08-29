@@ -1,4 +1,4 @@
-import"./index-d3xgJwxe.js";const a=(r,t)=>`${r.x.toFixed(t)},${r.y.toFixed(t)},${r.z.toFixed(t)}`,n=(r,t)=>{let o="";for(let e=0;e<t.length;e++)o+=`<${r}${e+1}>${t[e]}</${r}${e+1}>
+import"./index-Bhti0hx2.js";const a=(r,t)=>`${r.x.toFixed(t)},${r.y.toFixed(t)},${r.z.toFixed(t)}`,n=(r,t)=>{let o="";for(let e=0;e<t.length;e++)o+=`<${r}${e+1}>${t[e]}</${r}${e+1}>
     `;return o},I=r=>`<Head>
             <COMM>${r.comm}</COMM>
             <ARTICLENO>${r.articleno}</ARTICLENO>
