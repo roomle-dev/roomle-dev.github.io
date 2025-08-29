@@ -64,7 +64,7 @@ const startRoomlePlanner = async () => {
     },
     autoStart: true,
     restrictionLevel: 1,
-    deeplink: 'https://roomle-dev.github.io/nobilia-web-sdk-demo?id=#CONFIGURATIONID#  ',
+    deeplink: 'https://roomle-dev.github.io/nobilia-web-sdk-demo?plan_id=#CONFIGURATIONID#  ',
     hi: {
       libraryId: apiOptions.tecConfigInfo.libraryId,
       serverOptions: {
@@ -100,7 +100,7 @@ const startRoomlePlanner = async () => {
     doPriceCalculation(instance);
   };
   instance.ui.callbacks.onPlanElementRemoved = () => {
-    doPriceCalculation(instance);z
+    doPriceCalculation(instance);
   };
   instance.ui.callbacks.onRequestPlan = async () => {
     onRequestPlan(instance);
