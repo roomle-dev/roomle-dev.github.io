@@ -7,7 +7,7 @@ import RoomleEmbeddingApi from "@roomle/embedding-lib";
 import apiOptions from './utils/default-api-options';
 import {onMounted} from "vue";
 import {calculateTotalSum, getQueryParam} from "./utils/helpers";
-import {createExtObjId} from "@roomle/web-sdk";
+import {loadArticleCatalog, loadCalcScript, loadMasterData} from "./utils/loader.ts";
 
 // Data
 
@@ -56,7 +56,7 @@ const startRoomlePlanner = async () => {
       'stop-configure-hint': false,
     },
     overrideServerUrl: 'https://roomle.com/t/cp-internal',
-    catalogRootTag: createExtObjId(FAKE_ROOT_TAG),
+    catalogRootTag: `__ext__obj__#${FAKE_ROOT_TAG}`,
     featureFlags: {
       globalCallbacks: false,
       openCloseAnimation: true,
@@ -82,13 +82,20 @@ const startRoomlePlanner = async () => {
     (options as any).debugGeometry = debugMode;
   }
 
+  RoomleEmbeddingApi.setupHi({
+    onLoadJavascript: (libraryId: string) =>
+        loadCalcScript(libraryId, apiOptions.tecConfigInfo),
+    onLoadArticleCatalog: (libraryId: string) =>
+        loadArticleCatalog(libraryId, apiOptions.tecConfigInfo),
+    onLoadMasterData: (libraryId: string) =>
+        loadMasterData(libraryId, apiOptions.tecConfigInfo),
+  });
+
   const instance = await RoomleEmbeddingApi.createPlanner(
       'homag',
       document.getElementById('container')!,
       options,
   );
-
-  await instance.ui.loadObject(planId);
 
   instance.extended.callbacks.onCompletelyLoaded = () => {
     doPriceCalculation(instance);
@@ -107,11 +114,13 @@ const startRoomlePlanner = async () => {
   };
 
   (window as any).instance = instance;
+
+  await instance.ui.loadObject(planId);
 }
 
 // Hooks
 
-onMounted(() => startRoomlePlanner())
+onMounted(async () => await startRoomlePlanner())
 </script>
 
 <style scoped>

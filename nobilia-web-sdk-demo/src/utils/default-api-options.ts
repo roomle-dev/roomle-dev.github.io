@@ -72,8 +72,8 @@ export default {
      */
 
     // baseUrl: "https://connect.homag.com/",
-    // subscriptionId: "<your subscription id here>",
-    // key: "<your tapio key id here>",
+    subscriptionId: "a", // <your subscription id here>
+    key: "b", // <your tapio key id here>
 
     /** comment this line if you do not want to use the Roomle proxy  */
     // localUrl: 'https://localhost:7125/',

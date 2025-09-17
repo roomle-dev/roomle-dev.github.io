@@ -9,8 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@roomle/embedding-lib": "5.25.0",
-    "@roomle/web-sdk": "2.107.0-alpha.2",
+    "@roomle/embedding-lib": "5.28.0-alpha.5",
+    "@roomle/web-sdk": "2.108.0-alpha.4",
     "vue": "^3.5.18"
   },
   "devDependencies": {
