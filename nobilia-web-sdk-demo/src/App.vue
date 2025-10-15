@@ -184,6 +184,10 @@ const startRoomlePlanner = async () => {
       openCloseAnimation: true,
       slopingRoof: true,
     },
+    buttons: {
+      undo: true,
+      redo: true,
+    },
     autoStart: true,
     hi: {
       libraryId: apiOptions.tecConfigInfo.libraryId,
