@@ -7,8 +7,12 @@ import RoomleEmbeddingApi from "@roomle/embedding-lib";
 import apiOptions from './utils/default-api-options';
 import {onMounted} from "vue";
 import {calculateTotalSum, getQueryParam} from "./utils/helpers";
-// @ts-ignore
-import {createExtObjId} from "@roomle/web-sdk";
+
+const EXTERNAL_ID_PREFIX = '__ext__obj__#';
+
+type ExtObjId = `${typeof EXTERNAL_ID_PREFIX}${string}`;
+
+const createExtObjId = (id: string): ExtObjId => `${EXTERNAL_ID_PREFIX}${id}`;
 
 // Data
 
