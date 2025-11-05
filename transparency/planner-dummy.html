@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>HSP Dummy</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <style>
+      .loadConfiguration {
+        background-color: lightblue;
+      }
+
+      .loadConfigurableItem {
+        background-color: lightsalmon;
+      }
+    </style>
+    <div>
+      <textarea type="text" id="input-xml">
+bbv156v8uh3huqepm3c27c156tst2wgj</textarea
+      >
+      <button id="load-plan-xml" disabled="disabled">Load Plan XML</button>
+      <button id="load-plan-id" disabled="disabled">Load Plan ID</button>
+    </div>
+    <div class="dummy-buttons">
+      <button disabled="disabled" id="back">Back</button>
+      <button disabled="disabled" id="drawWallsManually">
+        Draw Walls Manually
+      </button>
+      <button disabled="disabled" id="addMeasurementLine">
+        Add Measurement Line
+      </button>
+      <button disabled="disabled" id="switch2D">Switch to 2D</button>
+      <button disabled="disabled" id="switch3D">Switch to 3D</button>
+      <button disabled="disabled" id="switchFirstPerson">
+        Switch to First Person
+      </button>
+      <button disabled="disabled" id="resume">Resume</button>
+      <button disabled="disabled" id="pause">Pause</button>
+      <button disabled="disabled" id="render-top-image">Top Image</button>
+      <button disabled="disabled" id="render-perspective-image">
+        Perspective Image
+      </button>
+      <button disabled="disabled" id="render-perspective-image-of">
+        Perspective Image Of
+      </button>
+      <button disabled="disabled" id="start-configuring">
+        Start configuring
+      </button>
+      <button disabled="disabled" id="start-viewing">Start viewing</button>
+      <button disabled="disabled" id="back-to-planner">Back to planner</button>
+      <button disabled="disabled" id="show-gui">Show GUI</button>
+      <div draggable="true" id="drag">Drag usm:frame</div>
+      <div draggable="true" id="drag2">Drag garden_hedge</div>
+    </div>
+    <script>
+      var appjsLoaded = function load(event) {
+        console.log('ON LOAD DONE');
+        const script = document.createElement('script');
+        script.src = 'planner-dummy-app.js';
+        document.body.appendChild(script);
+      };
+    </script>
+    <div
+      id="roomle-planner"
+      style="
+        height: 100vh;
+        width: 100%;
+        background-color: deeppink;
+        border: solid 1px gray;
+      "
+    ></div>
+    <script
+      src="planner-main.js"
+      id="appjs"
+      type="module"
+      onload="appjsLoaded();"
+    ></script>
+  </body>
+</html>
