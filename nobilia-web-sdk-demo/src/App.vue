@@ -214,6 +214,18 @@ const startRoomlePlanner = async () => {
     onLoadJavascript: (_libraryId) => loadCalcScript(options.hi),
     onLoadArticleCatalog: (_libraryId) => loadArticleCatalog(options.hi),
     onLoadMasterData: (_libraryId) => loadMasterData(options.hi),
+    onPlaceOrder: async (orderData) => {
+      const dataStr = JSON.stringify(orderData, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'orderData.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    },
   });
 
   const instance = await RoomleEmbeddingApi.createPlanner(
