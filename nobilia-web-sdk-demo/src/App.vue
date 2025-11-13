@@ -172,6 +172,7 @@ const startRoomlePlanner = async () => {
   const options = {
     moc: true,
     saveToIdb: false,
+    locale: 'en',
     notifications: {
       'first-person-controls': false,
       'interaction.add-element': false,
