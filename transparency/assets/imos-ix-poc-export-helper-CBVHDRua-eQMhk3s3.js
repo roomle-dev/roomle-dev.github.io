@@ -1,4 +1,4 @@
-import{aY as R,aZ as c,d as P}from"./index-3eT8XdN2.js";const I=(r,t)=>`${r.x.toFixed(t)},${r.y.toFixed(t)},${r.z.toFixed(t)}`,n=(r,t)=>{let o="";for(let e=0;e<t.length;e++)o+=`<${r}${e+1}>${t[e]}</${r}${e+1}>
+import{aY as R,aZ as c,d as P}from"./index-B6gMdnHJ.js";const I=(r,t)=>`${r.x.toFixed(t)},${r.y.toFixed(t)},${r.z.toFixed(t)}`,n=(r,t)=>{let o="";for(let e=0;e<t.length;e++)o+=`<${r}${e+1}>${t[e]}</${r}${e+1}>
     `;return o},T=r=>`<Head>
             <COMM>${r.comm}</COMM>
             <ARTICLENO>${r.articleno}</ARTICLENO>

@@ -1,4 +1,4 @@
-import{fK as E,fL as D,R as Z,k as _,c9 as I}from"./index-3eT8XdN2.js";class y{constructor(a,r="",o=[],e=[]){this.name=a,this.type=r,this.metadata=o,this.properties=e,this.children=[]}addMetadata(a,r){this.metadata.push({key:a,value:r})}addProperty(a,r=[]){this.properties.push({property:a,metadata:r})}addChild(a){this.children.push(a)}toString(a=0){const r="	".repeat(a),o=this.metadata.map(l=>{const h=l.key,u=l.value;if(Array.isArray(u)){const c=[];return c.push(`${h} = {`),u.forEach(P=>{c.push(`${r}		${P}`)}),c.push(`${r}	}`),c.join(`
+import{fK as E,fL as D,R as Z,k as _,c9 as I}from"./index-B6gMdnHJ.js";class y{constructor(a,r="",o=[],e=[]){this.name=a,this.type=r,this.metadata=o,this.properties=e,this.children=[]}addMetadata(a,r){this.metadata.push({key:a,value:r})}addProperty(a,r=[]){this.properties.push({property:a,metadata:r})}addChild(a){this.children.push(a)}toString(a=0){const r="	".repeat(a),o=this.metadata.map(l=>{const h=l.key,u=l.value;if(Array.isArray(u)){const c=[];return c.push(`${h} = {`),u.forEach(P=>{c.push(`${r}		${P}`)}),c.push(`${r}	}`),c.join(`
 `)}else return`${h} = ${u}`}),e=o.length?` (
 ${o.map(l=>`${r}	${l}`).join(`
 `)}
