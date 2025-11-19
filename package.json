@@ -7,8 +7,7 @@
   "homepage": "https://github.com/roomle-dev/roomle-dev.github.io#readme",
   "scripts": {
     "new": "npm create vite@latest",
-    "build:all": "node build-all.js",
-    "deploy": "npm run build:all && gh-pages -d out"
+    "deploy": "node build-all.js && gh-pages -d out"
   },
   "repository": {
     "type": "git",

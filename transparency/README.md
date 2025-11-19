@@ -1,18 +1,36 @@
-# Roomle Web SDK
+# Roomle Web SDK Transparent Background demo
 
-The official npm package of the [Roomle](https://www.roomle.com/en) Web SDK.
-With the Web SDK you you can build your own UI for the Rubens Configurator, GLB-Viewer or Plan-Viewer.
+https://roomle-dev.github.io/transparency/
 
-For release notes, see the [CHANGELOG](https://docs.roomle.com/rubens/changelogs/changelog-1).
+When setting up your Planner or Configurator, you must set the initData variable `transparentBackground` to `true`
 
-## Getting started
+```js
+const rubensPlanner = await RoomleSdk.getPlanner({
+    moc: true,
+    edit: true,
+    id: "86qux3bxbgv615qxzby3k2q4a4oni7o",
+    transparentBackground: true, // Enables transparency
+});
+```
 
-You can find an extensive guide on how to get started on [docs.roomle.com](https://docs.roomle.com/rubens/rubens-products/rubens-configurator/getting-started).
+Also be mindful to make sure the div containing the Roomle app/canvas is also set to transparent with CSS:
 
-## API documentation
+```css
+.scene {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: transparent; // <---
+}
+```
 
-Use our [API documentation](https://docs.roomle.com/rubens/rubens-products/rubens-products-reference/classes/roomle_configurator_api.default) to get further information on how to use the classes provided by the Web SDK.
+> [!TIP]
+> You can use the `mix-blend-mode` css property to achieve front overlay and underlay effects while maintaining legibility like this demo does:
+```css
+h2 {
+    font-weight: 900;
+    mix-blend-mode: difference;
+}
+```
 
-## Bugs & Issues
-
-If you encounter issues please report them using our [Servicedesk](https://roomle.atlassian.net/servicedesk/customer/portals).
+Please see the App.vue file [here](https://github.com/roomle-dev/roomle-dev.github.io/blob/master/transparency/src/App.vue#L217) for more information.

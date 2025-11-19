@@ -37,16 +37,10 @@ export default defineConfig({
 
 ### Deploying
 
-The `deploy` scripts will upload all the files in the `out` folder generated after building to GitHub pages, it may take a minute or two for the changes to go live.
+The `deploy` script will build all projects, then upload all the files in the `out` folder generated after building to GitHub pages, it may take a minute or two for the changes to go live.
 
-```bash
-npm run build:deploy
-```
 Builds all projects and deploys it.
 
 ```bash
 npm run deploy
 ```
-
-Deploys without building everything first.
-
