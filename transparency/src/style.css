@@ -1,0 +1,38 @@
+:root {
+    --gutter: clamp(1ch, 2.5vmax, 3ch);
+    --stack: clamp(1.25ex, 2.5vmax, 1.75ex);
+    --line-length: 70ch;
+    --page-padding-inline: calc(
+            (100vw - min(90rem, 100vw - var(--gutter) * 3)) / 2
+    );
+    --section-spacing: clamp(var(--stack) * 4, 10vmax, var(--stack) * 6);
+    --pt-double-canon: 4.666rem;
+    --pt-canon: 3.999rem;
+    --pt-double-great-primer: 2.999rem;
+    --pt-double-english: 2.333rem;
+    --pt-double-pica: 2rem;
+    --pt-paragon: 1.666rem;
+    --pt-great-primer: 1.5rem;
+    --pt-english: 1.166rem;
+    --pt-pica: 1rem;
+    --pt-small-pica: 0.916rem;
+    --pt-long-primer: 0.833rem;
+    --pt-bourgeois: 0.75rem;
+    --pt-chu: 3.499rem;
+    --pt-xiaochu: 2.999rem;
+    --pt-yi: 2.166rem;
+    --pt-xiaoyi: 1.999rem;
+    --pt-er: 1.833rem;
+    --pt-xiaoer: 1.5rem;
+    --pt-san: 1.333rem;
+    --pt-xiaosan: 1.25rem;
+    --pt-si: 1.166rem;
+    --pt-xiaosi: 1rem;
+    --pt-wu: 0.875rem;
+    --pt-xiaowu: 0.75rem;
+    font-family: 'Archivo', system-ui, sans-serif;
+    font-size: clamp(100%, 90% + 0.5vw, 150%);
+    font-weight: 300;
+    line-height: 1.4;
+    color-scheme: dark light;
+}
