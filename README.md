@@ -21,6 +21,15 @@ This does the following.
 - Adds the project to the root package.json `workspaces`.
 - Will attempt to add `base: "/folder-name-here/"` to the vite config.
 
+### Source Badge
+
+Please use the Vue source link badge where possible:
+
+```jsx
+<GitHubLink :position="'top left'" :link="'https://github.com/roomle-dev/roomle-dev.github.io/...'" />
+```
+
+
 ### Building
 
 As long as your project has a `build` command in its `package.json` the `build-all.js` script will build projects in the folders immediately adjacent to the root `package.json` (one level deep).
