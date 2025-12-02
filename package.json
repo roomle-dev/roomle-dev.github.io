@@ -6,8 +6,11 @@
   "author": "",
   "homepage": "https://github.com/roomle-dev/roomle-dev.github.io#readme",
   "scripts": {
-    "new": "npm create vite@latest",
-    "deploy": "node build-all.js && gh-pages -d out"
+    "new": "node create-new.js",
+    "deploy": "node build-all.js && gh-pages -d out",
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
   },
   "repository": {
     "type": "git",
@@ -16,10 +19,13 @@
   "workspaces": [
     "transparency",
     "tc-export-demo",
-    "nobilia-web-sdk-demo"
+    "nobilia-web-sdk-demo",
+    "glb-viewer-example",
+    "configurator-embedding-example"
   ],
   "devDependencies": {
     "create-vite": "^5.5.3",
-    "gh-pages": "^6.1.1"
+    "gh-pages": "^6.1.1",
+    "vitepress": "^2.0.0-alpha.15"
   }
 }

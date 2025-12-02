@@ -1,5 +1,6 @@
 {
-  "name": "sdk-3-example",
+  "name": "transparency-example",
+  "description": "Set up a 3D scene with a transparent background that allows content to render behind a scene or model",
   "private": true,
   "version": "0.0.0",
   "type": "module",

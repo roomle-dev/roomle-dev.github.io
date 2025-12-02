@@ -1,4 +1,5 @@
 <template>
+  <GitHubLink :position="'top right'" :link="'https://github.com/roomle-dev/roomle-dev.github.io/tree/master/transparency'" />
   <div class="top"></div>
 
 
@@ -219,6 +220,7 @@ import {onMounted, ref} from "vue";
 import RoomleSdk from "@roomle/web-sdk";
 import {startScrolling} from "./utils/scroller.ts";
 import Loading from './loading.svg?url'
+import GitHubLink from "../../shared/components/GitHubLink.vue";
 
 const scene = ref();
 

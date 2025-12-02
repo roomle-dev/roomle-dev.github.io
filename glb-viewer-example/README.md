@@ -1,4 +1,4 @@
-# https://roomle-dev.github.io/tc-export-demo/
+# https://roomle-dev.github.io/glb-viewer-example/
 
 Check `src/App.vue` for implementation details.
 

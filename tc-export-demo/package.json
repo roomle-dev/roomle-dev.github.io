@@ -1,5 +1,6 @@
 {
   "name": "tc-export-demo",
+  "description": "Example of sending data from an embedding instance to HOMAG Intelligence TecConfig",
   "version": "0.0.0",
   "private": true,
   "type": "module",

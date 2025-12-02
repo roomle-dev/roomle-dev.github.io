@@ -1,4 +1,5 @@
 <template>
+  <GitHubLink :position="'top left'" :link="'https://github.com/roomle-dev/roomle-dev.github.io/tree/master/tc-export-demo'" />
   <div id="roomle-configurator" ref="embeddingTarget" />
 </template>
 
@@ -6,6 +7,7 @@
 import { onMounted, ref } from 'vue'
 import RoomleEmbeddingApi from '@roomle/embedding-lib'
 import { downloadZip } from 'client-zip'
+import GitHubLink from "../../shared/components/GitHubLink.vue";
 
 interface TechnicalDataItem {
   constructionPrincipleId: string

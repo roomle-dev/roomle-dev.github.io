@@ -1,4 +1,5 @@
 <template>
+  <GitHubLink :position="'top left'" :link="'https://github.com/roomle-dev/roomle-dev.github.io/tree/master/nobilia-web-sdk-demo'" />
   <div id="container"></div>
 </template>
 
@@ -7,6 +8,7 @@ import RoomleEmbeddingApi from "@roomle/embedding-lib";
 import apiOptions from './utils/default-api-options';
 import {onMounted} from "vue";
 import {calculateTotalSum, getQueryParam} from "./utils/helpers";
+import GitHubLink from "../../shared/components/GitHubLink.vue";
 
 const EXTERNAL_ID_PREFIX = '__ext__obj__#';
 
