@@ -4,8 +4,8 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   srcDir: "docs",
 
-  title: "Roomle Developer Examples",
-  description: "Roomle Developer Examples",
+  title: "Roomle Code Examples",
+  description: "Roomle Code Examples",
   head: [['link', { rel: 'icon', href: '/favicon.png' }]],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config

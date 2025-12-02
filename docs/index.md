@@ -4,15 +4,18 @@ layout: home
 
 hero:
   name: ""
-  text: "Roomle Developer Examples"
+  text: "Roomle Code Examples"
   tagline: ""
   actions:
     - theme: brand
       text: Roomle Documentation
       link: https://docs.roomle.com/
-#    - theme: alt
-#      text: SDK Examples
-#      link: /sdk
+    - theme: alt
+      text: Embedding Lib
+      link: https://www.npmjs.com/package/@roomle/embedding-lib
+    - theme: alt
+      text: Roomle SDK
+      link: https://www.npmjs.com/package/@roomle/web-sdk
 
 features:
   - title: transparency-example
