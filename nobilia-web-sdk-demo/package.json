@@ -1,5 +1,6 @@
 {
   "name": "nobilia-web-sdk-demo",
+  "description": "An example of using HOMAG Intelligence with the Rubens Embedding Lib",
   "private": true,
   "version": "0.0.0",
   "type": "module",

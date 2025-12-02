@@ -16,7 +16,7 @@ Each subfolder in this directory acts as a page, for example the `transparency` 
 npm run new
 ```
 
-This will run the vite setup, so you can quickly scaffold a new project to add to this GitHub pages page.
+This will run the vite setup and add the newly created folder to the "workspaces" entry in the root package.json, so you can quickly scaffold a new project, to add to this GitHub pages-page.
 
 ### Building
 
