@@ -16,7 +16,10 @@ Each subfolder in this directory acts as a page, for example the `transparency` 
 npm run new
 ```
 
-This will run the vite setup and add the newly created folder to the "workspaces" entry in the root package.json, so you can quickly scaffold a new project, to add to this GitHub pages-page.
+This does the following.
+- Initializes a new vite project with `npx create vite@latest`.
+- Adds the project to the root package.json `workspaces`.
+- Will attempt to add `base: "/folder-name-here/"` to the vite config.
 
 ### Building
 
@@ -26,7 +29,7 @@ After the build for each project is done it will copy the `dist` folder from tha
 
 Your project's `dist` folder must have an `index.html` in it, otherwise GitHub pages will not be able to find the projects URL.
 
-It's mandatory to set the `base` option in the vite config, so vite will know to generate relative paths for the final build, for example:
+The `npm run new` script should do this for you, but It's mandatory to set the `base` option in the vite config, so vite will know to generate relative paths for the final build, for example:
 
 ```js
 export default defineConfig({
@@ -37,10 +40,19 @@ export default defineConfig({
 
 ### Deploying
 
-The `deploy` script will build all projects, then upload all the files in the `out` folder generated after building to GitHub pages, it may take a minute or two for the changes to go live.
-
-Builds all projects and deploys it.
-
 ```bash
 npm run deploy
 ```
+
+This deploys all the projects in the workspace to Github Pages.
+
+It does the following:
+
+1. Builds all projects in folders that are present in the `workspaces` part of the root `package.json`.
+2. Creates a entries in `docs/index.md` for each project to a list visible on https://roomle-dev.github.io/.
+   1. The title and description are derived from each project's `package.json`.
+   2. If there is no description it will not be included in the list of projects.
+3. Builds the Vitepress main page.
+4. Collects all project's `dist` folders and puts them into `./out`.
+5. Deploys `./out` to GitHub Pages.
+

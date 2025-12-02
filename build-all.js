@@ -2,16 +2,24 @@ const fs = require('fs').promises;
 const path = require('path');
 const {execSync} = require('child_process');
 
-const ignoreFolders = ['node_modules', '.git', 'out', '.vscode', '.idea', 'docs', '.vitepress', 'shared'];
-
 const wait = async (delay) =>
     new Promise((resolve) => setTimeout(resolve, delay));
 
 async function buildProjects() {
     try {
-        // Get all directories in the current folder
-        const entries = await fs.readdir('.', {withFileTypes: true});
-        const dirs = entries.filter(entry => entry.isDirectory() && !ignoreFolders.includes(entry.name));
+        // Read package.json to get workspaces
+        const rootPackageJsonPath = path.join('.', 'package.json');
+        const rootPackageJson = JSON.parse(await fs.readFile(rootPackageJsonPath, 'utf-8'));
+
+        // Get workspace directories
+        const dirs = rootPackageJson.workspaces || [];
+
+        if (dirs.length === 0) {
+            console.log('No workspaces found in package.json');
+            return;
+        }
+
+        console.log(`Found ${dirs.length} workspace(s): ${dirs.join(', ')}`);
 
         // Delete the 'out' directory if it exists
         try {
@@ -28,7 +36,7 @@ async function buildProjects() {
         const features = [];
 
         for (const dir of dirs) {
-            const projectPath = path.join('.', dir.name);
+            const projectPath = path.join('.', dir);
             const packageJsonPath = path.join(projectPath, 'package.json');
 
             try {
@@ -43,14 +51,14 @@ async function buildProjects() {
                     features.push({
                         title: packageJson.name,
                         details: packageJson.description,
-                        link: `https://github.com/roomle-dev/roomle-dev.github.io/tree/master/${dir.name}`,
+                        link: `https://github.com/roomle-dev/roomle-dev.github.io/tree/master/${dir}`,
                         target: '_blank'
                     });
                 }
 
                 // Check if the 'build' script exists
                 if (packageJson.scripts && packageJson.scripts.build) {
-                    console.log(`Building ${dir.name}...`);
+                    console.log(`Building ${dir}...`);
 
                     // Run the build script
                     execSync('npm run build', {cwd: projectPath, stdio: 'inherit'});
@@ -63,7 +71,7 @@ async function buildProjects() {
                         await fs.access(distPath);
 
                         // Create project-specific folder in 'out'
-                        const outProjectPath = path.join('out', dir.name);
+                        const outProjectPath = path.join('out', dir);
                         await fs.mkdir(outProjectPath, {recursive: true});
 
                         // Move contents of 'dist' to 'out/project-name'
@@ -74,15 +82,15 @@ async function buildProjects() {
                             await fs.rename(srcPath, destPath);
                         }
 
-                        console.log(`${dir.name} built and moved to out/${dir.name}`);
+                        console.log(`${dir} built and moved to out/${dir}`);
                     } catch (error) {
-                        console.error(`No 'dist' folder found for ${dir.name} after build`);
+                        console.error(`No 'dist' folder found for ${dir} after build`);
                     }
                 } else {
-                    console.log(`No 'build' script found for ${dir.name}, skipping...`);
+                    console.log(`No 'build' script found for ${dir}, skipping...`);
                 }
             } catch (error) {
-                console.error(`Error processing ${dir.name}:`, error.message);
+                console.error(`Error processing ${dir}:`, error.message);
             }
         }
 

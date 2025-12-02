@@ -173,6 +173,22 @@ async function createNew() {
 
             if (!foundConfig) {
                 console.warn('\nWarning: Vite config file not found within timeout');
+                console.log('Creating vite.config.js with base configuration...');
+
+                const configPath = path.join(projectName, 'vite.config.js');
+                const configContent = `import { defineConfig } from 'vite'
+
+export default defineConfig({
+  base: '/${projectName}/'
+})
+`;
+
+                try {
+                    await fs.writeFile(configPath, configContent, 'utf-8');
+                    console.log(`✓ Created vite.config.js with base: '/${projectName}/'`);
+                } catch (err) {
+                    console.error('Error creating vite.config.js:', err.message);
+                }
             }
         })();
 
