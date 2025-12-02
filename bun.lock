@@ -9,6 +9,13 @@
         "vitepress": "^2.0.0-alpha.15",
       },
     },
+    "configurator-js-example": {
+      "name": "configurator-js-example",
+      "version": "0.0.0",
+      "devDependencies": {
+        "vite": "npm:rolldown-vite@7.2.5",
+      },
+    },
     "glb-viewer-example": {
       "name": "glb-viewer-example",
       "version": "0.0.0",
@@ -509,6 +516,8 @@
     "computeds": ["computeds@0.0.1", "", {}, "sha512-7CEBgcMjVmitjYo5q8JTJVra6X5mQ20uTThdK+0kR7UEaDrAWEQcRiBtWJzga4eRpP6afNwwLsX2SET2JhVB1Q=="],
 
     "concat-map": ["concat-map@0.0.1", "", {}, "sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg=="],
+
+    "configurator-js-example": ["configurator-js-example@workspace:configurator-js-example"],
 
     "convert-source-map": ["convert-source-map@2.0.0", "", {}, "sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg=="],
 

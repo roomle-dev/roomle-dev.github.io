@@ -20,7 +20,8 @@
     "transparency",
     "tc-export-demo",
     "nobilia-web-sdk-demo",
-    "glb-viewer-example"
+    "glb-viewer-example",
+    "configurator-js-example"
   ],
   "devDependencies": {
     "create-vite": "^5.5.3",
