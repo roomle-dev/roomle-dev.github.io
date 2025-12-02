@@ -54,6 +54,8 @@ async function buildProjects() {
                         link: `https://github.com/roomle-dev/roomle-dev.github.io/tree/master/${dir}`,
                         target: '_blank'
                     });
+                } else {
+                    console.error(`Could not find a description in ${dir} package.json! Excluding from docs.`);
                 }
 
                 // Check if the 'build' script exists

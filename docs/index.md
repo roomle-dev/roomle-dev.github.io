@@ -31,5 +31,9 @@ features:
     details: Usage example of the GLB Viewer mode in the Roomle SDK
     link: https://github.com/roomle-dev/roomle-dev.github.io/tree/master/glb-viewer-example
     target: '_blank'
+  - title: configurator-js-example
+    details: Configurator implementation with the roomle embedding lib in plain Javascript
+    link: https://github.com/roomle-dev/roomle-dev.github.io/tree/master/configurator-embedding-example
+    target: '_blank'
 ---
 

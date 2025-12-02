@@ -53,6 +53,9 @@ export default defineConfig({
 npm run deploy
 ```
 
+> [!IMPORTANT]
+> Don't forget to include a `description` in your project's `package.json` otherwise it will not be visible on https://roomle-dev.github.io/.
+
 This deploys all the projects in the workspace to Github Pages.
 
 It does the following:
