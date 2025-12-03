@@ -1,10 +1,21 @@
-## roomle-dev.github.io
+## https://roomle-dev.github.io/
 
-General purpose repo for hosting development related pages/demos.
+Code examples for implementing Roomle's core products.
 
-Each subfolder in this directory acts as a page, for example the `transparency` folder will be accessible via https://roomle-dev.github.io/transparency/, nested pages currently don't work.
+You can find all code examples at https://roomle-dev.github.io/
 
-### Developing
+### Roomle Packages
+
+[@roomle/embedding-lib](https://www.npmjs.com/package/@roomle/embedding-lib) - For embedding Roomle with our UI in a website via an iframe.
+
+[@roomle/web-sdk](https://www.npmjs.com/package/@roomle/web-sdk) - For adding Roomle to your project and writing a custom UI around it.
+
+### Roomle Docs
+
+Our Main documentation and guides can be found at https://docs.roomle.com/
+___
+
+### For Roomle Developers Only
 
 #### Dependencies
 
