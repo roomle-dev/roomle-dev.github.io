@@ -9,6 +9,7 @@ import apiOptions from './utils/default-api-options';
 import {onMounted} from "vue";
 import {calculateTotalSum, getQueryParam} from "./utils/helpers";
 import GitHubLink from "../../shared/components/GitHubLink.vue";
+import { omPostRequest } from "./utils/loader";
 
 const EXTERNAL_ID_PREFIX = '__ext__obj__#';
 
@@ -228,6 +229,18 @@ const startRoomlePlanner = async () => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+    },
+    onFetchPrice: async (orderData: any) => {
+      const useNobiliaHack = libraryId.includes('nobilia');
+      const requestHeader = {
+        'x-aux-header': useNobiliaHack ? 'nobilia' : 'none',
+      };
+      const body = {
+        orderData,
+      };
+      const url = '/api/price/calculate';
+      const json = await omPostRequest(options.hi, body, url, requestHeader);
+      return json;
     },
   });
 
