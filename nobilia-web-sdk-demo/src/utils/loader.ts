@@ -107,3 +107,29 @@ export const loadCalcScript = async (
   }
   return jsCode;
 };
+
+export const omPostRequest = async (
+  hiInitData: any,
+  body: any,
+  url: string,
+  extraHeaders = {},
+) => {
+  const { om } = hiInitData.serverOptions ?? {};
+  const importBaseUrl = encodeURIComponent(om?.importBaseUrl || '');
+  const subscriptionId = encodeURIComponent(om?.subscriptionId || '');
+  const key = om?.key || '';
+  const response = await fetch(
+    HOMAG_INTELLIGENCE_ENDPOINT +
+      `${encodeURIComponent(url)}&subscriptionId=${subscriptionId}&apiKey=${key}&baseUrl=${importBaseUrl}`,
+    {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+        ...extraHeaders,
+      },
+    },
+  );
+  const json = await response.json();
+  return json;
+};
