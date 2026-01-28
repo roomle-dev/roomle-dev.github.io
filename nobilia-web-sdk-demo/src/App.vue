@@ -10,6 +10,7 @@ import {onMounted} from "vue";
 import {calculateTotalSum, getQueryParam} from "./utils/helpers";
 import GitHubLink from "../../shared/components/GitHubLink.vue";
 import { omPostRequest } from "./utils/loader";
+import {setupHi} from "@roomle/embedding-lib/hi";
 
 const EXTERNAL_ID_PREFIX = '__ext__obj__#';
 
@@ -25,6 +26,7 @@ const FAKE_ROOT_TAG = 'external:root-tag';
 
 const HOMAG_INTELLIGENCE_ENDPOINT =
   'https://europe-west3-rml-showcases.cloudfunctions.net/proxy_request?url=';
+  // 'http://localhost:8080/proxy_request?url=';
 
 interface HomagIntelligenceInitData {
   libraryId: string;
@@ -39,6 +41,7 @@ interface OrderManagerOptions {
 
 interface ApiOptions {
   subscriptionId: string;
+  key: string;
   om?: OrderManagerOptions;
   endpointUrl?: string;
   localUrl?: string;
@@ -58,14 +61,14 @@ const fetchDataWithAuthorization = async (
   };
   try {
     const startTime = performance.now();
-    const { subscriptionId, endpointUrl } = apiOptions;
-    const key = ''; //om?.key || '';
+    const { subscriptionId, endpointUrl, key } = apiOptions;
+    // const key = ''; //_key;
     const response = await fetch(
       HOMAG_INTELLIGENCE_ENDPOINT +
         encodeURIComponent(url) +
         `&subscriptionId=${encodeURIComponent(subscriptionId)}` +
         (key ? `&apiKey=${encodeURIComponent(key)}` : '') +
-        (endpointUrl ? `&baseUrl=${encodeURIComponent(endpointUrl)}` : ''),
+        (endpointUrl ? `&baseUrl=${encodeURIComponent(endpointUrl)}` : '') /*+ '&nobiliaHack=true'*/,
       authorizationHeaders,
     );
     const endTime = performance.now();
@@ -191,6 +194,7 @@ const startRoomlePlanner = async () => {
       globalCallbacks: false,
       openCloseAnimation: true,
       slopingRoof: true,
+      enableTwoLevelCatalog: true,
     },
     buttons: {
       undo: true,
@@ -200,6 +204,7 @@ const startRoomlePlanner = async () => {
     hi: {
       libraryId: apiOptions.tecConfigInfo.libraryId,
       serverOptions: {
+        key: apiOptions.tecConfigInfo.libraryId,
         subscriptionId: apiOptions.tecConfigInfo.om.subscriptionId,
         om: {
           key: apiOptions.tecConfigInfo.om.key,
@@ -214,11 +219,11 @@ const startRoomlePlanner = async () => {
     (options as any).debugGeometry = debugMode;
   }
 
-  RoomleEmbeddingApi.setupHi({
-    onLoadJavascript: (_libraryId) => loadCalcScript(options.hi),
-    onLoadArticleCatalog: (_libraryId) => loadArticleCatalog(options.hi),
-    onLoadMasterData: (_libraryId) => loadMasterData(options.hi),
-    onPlaceOrder: async (orderData) => {
+  await setupHi(options.hi, {
+    onLoadJavascript: (_libraryId: string) => loadCalcScript(options.hi),
+    onLoadArticleCatalog: (_libraryId: string) => loadArticleCatalog(options.hi),
+    onLoadMasterData: (_libraryId: string) => loadMasterData(options.hi),
+    onPlaceOrder: async (orderData: any) => {
       const dataStr = JSON.stringify(orderData, null, 2);
       const blob = new Blob([dataStr], { type: 'application/json' });
       const url = URL.createObjectURL(blob);

@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@roomle/embedding-lib": "5.31.0",
+    "@roomle/embedding-lib": "6.0.0",
     "vue": "^3.5.18"
   },
   "devDependencies": {
