@@ -14,6 +14,7 @@ export interface ApiOptions {
   om?: OrderManagerOptions;
   endpointUrl?: string;
   localUrl?: string;
+  language?: string;
 }
 
 export const fetchDataWithAuthorization = async (
@@ -28,6 +29,10 @@ export const fetchDataWithAuthorization = async (
       'Access-Control-Allow-Origin': '*',
     },
   };
+  if (apiOptions.language) {
+    (authorizationHeaders.headers as any)['accept-language'] =
+      apiOptions.language;
+  }
   try {
     const startTime = performance.now();
     const {subscriptionId, endpointUrl} = apiOptions;

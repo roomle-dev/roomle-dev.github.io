@@ -45,6 +45,7 @@ interface ApiOptions {
   om?: OrderManagerOptions;
   endpointUrl?: string;
   localUrl?: string;
+  language?: string;
 }
 
 const fetchDataWithAuthorization = async (
@@ -59,6 +60,10 @@ const fetchDataWithAuthorization = async (
       'Access-Control-Allow-Origin': '*',
     },
   };
+  if (apiOptions.language) {
+    (authorizationHeaders.headers as any)['accept-language'] =
+      apiOptions.language;
+  }
   try {
     const startTime = performance.now();
     const { subscriptionId, endpointUrl, key } = apiOptions;
@@ -204,6 +209,7 @@ const startRoomlePlanner = async () => {
     hi: {
       libraryId: apiOptions.tecConfigInfo.libraryId,
       serverOptions: {
+        language: 'en',
         key: apiOptions.tecConfigInfo.libraryId,
         subscriptionId: apiOptions.tecConfigInfo.om.subscriptionId,
         om: {
