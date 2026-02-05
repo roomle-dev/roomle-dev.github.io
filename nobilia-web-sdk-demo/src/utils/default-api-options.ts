@@ -27,9 +27,17 @@ export default {
      * will have CORS issues
      */
 
+    /**
+     *  ALERT!
+     *  These subscriptionIds and keys should never be stored in your frontend code, they should be stored somewhere secure,
+     *  For example, in a backend server or in a proxy that forwards your requests to HOMAG Cloud.
+     *  Our demo proxy provides the ability to override these credentials for testing, but please keep these unset for production!
+     */
+
+
     // baseUrl: "https://connect.homag.com/",
-    subscriptionId: "a", // <your subscription id here>
-    key: "b", // <your tapio key id here>
+    subscriptionId: "a", // <your subscription id here> // NEVER PUT THESE IN FRONTEND PRODUCTION CODE
+    key: "b", // <your tapio key id here> // NEVER PUT THESE IN FRONTEND PRODUCTION CODE
 
     /** comment this line if you do not want to use the Roomle proxy  */
     // localUrl: 'https://localhost:7125/',
@@ -40,8 +48,8 @@ export default {
     // OM means order-manager
     // These are empty because they are inserted by the roomle proxy for this demo.
     om: {
-      subscriptionId: '',
-      key: '',
+      subscriptionId: '', // <your subscription id here> // NEVER PUT THESE IN FRONTEND PRODUCTION CODE
+      key: '', // <your tapio key id here> // NEVER PUT THESE IN FRONTEND PRODUCTION CODE
       importBaseUrl: 'https://connect.homag.com'
     },
 
