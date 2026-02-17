@@ -34,6 +34,13 @@ export default {
      *  Our demo proxy provides the ability to override these credentials for testing, but please keep these unset for production!
      */
 
+    /*
+    * PROXY!
+    * See an example of a proxy here https://github.com/roomle-dev/roomle-dev.github.io/blob/master/nobilia-web-sdk-demo/proxy/index.js#L13
+    * If you set `subscriptionId` and `key` in this config file, it will override the credentials the example proxy uses.
+    * This credential overriding should only be used in testing and not on production, see above.
+    */
+
 
     // baseUrl: "https://connect.homag.com/",
     subscriptionId: "a", // <your subscription id here> // NEVER PUT THESE IN FRONTEND PRODUCTION CODE

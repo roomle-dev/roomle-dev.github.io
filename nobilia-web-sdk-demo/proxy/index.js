@@ -24,6 +24,23 @@ export const proxy_request = async (req, res) => {
         return;
     }
 
+    /*
+    * EXAMPLE USAGE!
+    *
+    * Make a request to this proxy with the following URL query parameters:
+    *  ?url=example.com // This defines the target URL the proxy should forward this request to.
+    *  ?subscriptionId=xxx // this overrides the subscription ID with the one present in the URL rather than  the one present in the .env
+    *  &apiKey=xxx // same as above
+    *  &overrideBaseUrl=xxx // same as above
+    *
+    * In production you would not be overriding the subscriptionId and apiKey as those creds should only be accessed from this proxy's environment variables.
+    * So you do not expose sensitive credentials to the browser.
+    *
+    * So an example URL for a request would be:
+    *  https://proxy.cloudfunctions.net/proxy_request?url=api%2Fpos%2Flibraries%2Fnobilia_Minifabrik%2Fcalc.js&subscriptionId=xyz&apiKey=abc
+    *  https://proxy.cloudfunctions.net/proxy_request?url=api%2Fpos%2Flibraries%2Fnobilia_Minifabrik%2Fcalc.js
+    */
+
     try {
         const targetUrl = decodeURIComponent(req.query.url ?? '');
         const overrideSubscriptionId = req.query.subscriptionId;
