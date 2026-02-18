@@ -1,6 +1,14 @@
 <template>
   <GitHubLink :position="'top right'" :link="'https://github.com/roomle-dev/roomle-dev.github.io/tree/master/nobilia-web-sdk-demo'" />
   <div id="settings-bar">
+    <details id="settings-details">
+      <summary>Information</summary>
+      <div>
+        <h4>Testing Credentials</h4>
+        <p>The proxy used in this demo will use placeholder credentials <b>(API Key, Library ID, Subscription ID, Endpoint URL)</b> by default.</p>
+        <p>Entering a value into any of the corresponding fields will tell the demo proxy to use the credential you supplied instead.</p>
+      </div>
+    </details>
     <label for="locale-select">Locale:</label>
     <select id="locale-select" v-model="settings.locale">
       <option value="en-US,en">en-US,en</option>
@@ -12,6 +20,8 @@
     <input type="text" id="library-id-input" v-model="settings.libraryId" placeholder="Library ID" />
     <label for="subscription-id-input">Subscription ID:</label>
     <input type="text" id="subscription-id-input" v-model="settings.subscriptionId" placeholder="Subscription ID" />
+    <label for="endpoint-url-input">Endpoint URL:</label>
+    <input type="text" id="endpoint-url-input" v-model="settings.endpointUrl" placeholder="https://connect.homag.com" />
     <label for="user-right-select">Parameter Level:</label>
     <select id="user-right-select" v-model="settings.userRight">
       <option value="Simple">Simple</option>
@@ -19,14 +29,6 @@
       <option value="Master">Master</option>
     </select>
     <button id="reload-settings" @click="reloadWithSettings">Reload</button>
-    <details id="settings-details">
-      <summary>Information</summary>
-      <div>
-        <h4>Testing Credentials</h4>
-        <p>The proxy used in this demo will use placeholder credentials (API Key, Library ID, Subscription ID) by default.</p>
-        <p>Entering a value into any of the corresponding fields will tell the demo proxy to use the credential you supplied instead.</p>
-      </div>
-    </details>
   </div>
   <div id="container"></div>
 </template>
@@ -47,6 +49,7 @@ interface DemoSettings {
   apiKey: string;
   libraryId: string;
   subscriptionId: string;
+  endpointUrl: string;
   userRight: 'Simple' | 'Advanced' | 'Master';
 }
 
@@ -56,6 +59,7 @@ const loadSettings = (): DemoSettings => {
     apiKey: '',
     libraryId: '',
     subscriptionId: '',
+    endpointUrl: 'https://connect.homag.com',
     userRight: 'Simple',
   };
   try {
@@ -85,6 +89,8 @@ const qpLibraryId = getQueryParam('libraryId');
 if (qpLibraryId) settings.libraryId = qpLibraryId;
 const qpSubscriptionId = getQueryParam('subscriptionId');
 if (qpSubscriptionId) settings.subscriptionId = qpSubscriptionId;
+const qpEndpointUrl = getQueryParam('endpointUrl');
+if (qpEndpointUrl) settings.endpointUrl = qpEndpointUrl;
 const qpUserRight = getQueryParam('user_right');
 if (qpUserRight === 'Simple' || qpUserRight === 'Advanced' || qpUserRight === 'Master') {
   settings.userRight = qpUserRight;
@@ -132,6 +138,7 @@ const startRoomlePlanner = async () => {
   if (settings.apiKey) apiOptions.tecConfigInfo.key = settings.apiKey;
   if (settings.libraryId) apiOptions.tecConfigInfo.libraryId = settings.libraryId;
   apiOptions.tecConfigInfo.subscriptionId = settings.subscriptionId;
+  if (settings.endpointUrl) apiOptions.tecConfigInfo.endpointUrl = settings.endpointUrl;
   apiOptions.uiConfiguration.userRight = settings.userRight;
 
   const options = {
