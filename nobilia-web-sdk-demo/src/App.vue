@@ -1,8 +1,15 @@
 <template>
   <GitHubLink :position="'top right'" :link="'https://github.com/roomle-dev/roomle-dev.github.io/tree/master/nobilia-web-sdk-demo'" />
   <div id="settings-bar">
-    <label for="locale-input">Locale:</label>
-    <input type="text" id="locale-input" v-model="settings.locale" placeholder="e.g. en, de" />
+    <label for="locale-select">Locale:</label>
+    <select id="locale-select" v-model="settings.locale">
+      <option value="en-US,en">en-US,en</option>
+      <option value="de-DE,de">de-DE,de</option>
+    </select>
+    <label for="api-key-input">API Key:</label>
+    <input type="text" id="api-key-input" v-model="settings.apiKey" placeholder="API Key" />
+    <label for="library-id-input">Library ID:</label>
+    <input type="text" id="library-id-input" v-model="settings.libraryId" placeholder="Library ID" />
     <label for="subscription-id-input">Subscription ID:</label>
     <input type="text" id="subscription-id-input" v-model="settings.subscriptionId" placeholder="Subscription ID" />
     <label for="user-right-select">Parameter Level:</label>
@@ -12,6 +19,14 @@
       <option value="Master">Master</option>
     </select>
     <button id="reload-settings" @click="reloadWithSettings">Reload</button>
+    <details id="settings-details">
+      <summary>Information</summary>
+      <div>
+        <h4>Testing Credentials</h4>
+        <p>The proxy used in this demo will use placeholder credentials (API Key, Library ID, Subscription ID) by default.</p>
+        <p>Entering a value into any of the corresponding fields will tell the demo proxy to use the credential you supplied instead.</p>
+      </div>
+    </details>
   </div>
   <div id="container"></div>
 </template>
@@ -29,13 +44,17 @@ const LS_KEY = 'nobilia-demo-settings';
 
 interface DemoSettings {
   locale: string;
+  apiKey: string;
+  libraryId: string;
   subscriptionId: string;
   userRight: 'Simple' | 'Advanced' | 'Master';
 }
 
 const loadSettings = (): DemoSettings => {
   const defaults: DemoSettings = {
-    locale: 'en',
+    locale: 'en-US,en',
+    apiKey: '',
+    libraryId: '',
     subscriptionId: '',
     userRight: 'Simple',
   };
@@ -60,6 +79,10 @@ const settings = reactive<DemoSettings>(loadSettings());
 // Query params override localStorage values
 const qpLocale = getQueryParam('locale');
 if (qpLocale) settings.locale = qpLocale;
+const qpApiKey = getQueryParam('apiKey');
+if (qpApiKey) settings.apiKey = qpApiKey;
+const qpLibraryId = getQueryParam('libraryId');
+if (qpLibraryId) settings.libraryId = qpLibraryId;
 const qpSubscriptionId = getQueryParam('subscriptionId');
 if (qpSubscriptionId) settings.subscriptionId = qpSubscriptionId;
 const qpUserRight = getQueryParam('user_right');
@@ -106,7 +129,8 @@ const startRoomlePlanner = async () => {
       apiOptions.tecConfigInfo.libraryId;
 
   apiOptions.tecConfigInfo.language = settings.locale;
-  apiOptions.tecConfigInfo.libraryId = libraryId;
+  if (settings.apiKey) apiOptions.tecConfigInfo.key = settings.apiKey;
+  if (settings.libraryId) apiOptions.tecConfigInfo.libraryId = settings.libraryId;
   apiOptions.tecConfigInfo.subscriptionId = settings.subscriptionId;
   apiOptions.uiConfiguration.userRight = settings.userRight;
 
@@ -212,6 +236,7 @@ onMounted(() => startRoomlePlanner())
 
 <style scoped>
 #settings-bar {
+  position: relative;
   display: flex;
   align-items: center;
   padding: 0.5rem 1rem;
@@ -240,5 +265,18 @@ onMounted(() => startRoomlePlanner())
 #container {
   height: calc(100vh - 42px);
   width: 100vw;
+}
+
+#settings-details {
+  cursor: pointer;
+}
+
+#settings-details[open] div {
+  max-width: 20rem;
+  position: absolute;
+  margin-top: 0.5rem;
+  padding: 0.4rem 1rem 0.4rem 1rem;
+  background: #ffffff;
+  filter: drop-shadow(0px 1px 4px rgba(0, 0, 0, 0.2));
 }
 </style>

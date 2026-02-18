@@ -34,6 +34,7 @@ export default {
     // baseUrl:
     //   'https://europe-west3-rml-showcases.cloudfunctions.net/proxy_request?url=',
     baseUrl: 'http://localhost:8080/proxy_request?url=',
+    endpointUrl: 'https://connect.homag.com/',
 
     /**
      *  ALERT!
@@ -51,8 +52,9 @@ export default {
 
     language: 'en-US,en', // en-US,en  de-DE,de
 
-    subscriptionId: 'e2fe8b3d-da31-4a20-92ab-ab6e3839300e', // <your subscription id here> // NEVER PUT THESE IN FRONTEND PRODUCTION CODE
+    subscriptionId: '', // <your subscription id here> // NEVER PUT THESE IN FRONTEND PRODUCTION CODE
     libraryId: 'nobilia_Minifabrik',
+    key: '',
 
     // OM means order-manager
     om: {
