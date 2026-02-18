@@ -60,7 +60,7 @@ export default {
     om: {
       subscriptionId: '', // <your subscription id here> // NEVER PUT THESE IN FRONTEND PRODUCTION CODE
       key: '', // <your tapio key id here> // NEVER PUT THESE IN FRONTEND PRODUCTION CODE
-      importBaseUrl: 'https://connect.homag.com'
+      importBaseUrl: 'https://connect.homag.com/'
     },
   } as TcOptions,
 };

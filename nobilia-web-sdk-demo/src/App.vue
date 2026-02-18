@@ -21,7 +21,7 @@
     <label for="subscription-id-input">Subscription ID:</label>
     <input type="text" id="subscription-id-input" v-model="settings.subscriptionId" placeholder="Subscription ID" />
     <label for="endpoint-url-input">Endpoint URL:</label>
-    <input type="text" id="endpoint-url-input" v-model="settings.endpointUrl" placeholder="https://connect.homag.com" />
+    <input type="text" id="endpoint-url-input" v-model="settings.endpointUrl" placeholder="https://connect.homag.com/" />
     <label for="user-right-select">Parameter Level:</label>
     <select id="user-right-select" v-model="settings.userRight">
       <option value="Simple">Simple</option>
@@ -59,7 +59,7 @@ const loadSettings = (): DemoSettings => {
     apiKey: '',
     libraryId: '',
     subscriptionId: '',
-    endpointUrl: 'https://connect.homag.com',
+    endpointUrl: 'https://connect.homag.com/',
     userRight: 'Simple',
   };
   try {
