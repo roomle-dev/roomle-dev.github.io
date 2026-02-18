@@ -1,4 +1,4 @@
-import{cq as E,cr as D,c as Z,cs as _,ct as I}from"./index-BowFTnF3.js";class y{constructor(a,r="",o=[],e=[]){this.name=a,this.type=r,this.metadata=o,this.properties=e,this.children=[]}addMetadata(a,r){this.metadata.push({key:a,value:r})}addProperty(a,r=[]){this.properties.push({property:a,metadata:r})}addChild(a){this.children.push(a)}toString(a=0){const r="	".repeat(a),o=this.metadata.map(l=>{const h=l.key,u=l.value;if(Array.isArray(u)){const c=[];return c.push(`${h} = {`),u.forEach(P=>{c.push(`${r}		${P}`)}),c.push(`${r}	}`),c.join(`
+import{cq as E,cr as D,c as Z,cs as _,ct as I}from"./index-vzMrgKlp.js";class y{constructor(a,r="",o=[],e=[]){this.name=a,this.type=r,this.metadata=o,this.properties=e,this.children=[]}addMetadata(a,r){this.metadata.push({key:a,value:r})}addProperty(a,r=[]){this.properties.push({property:a,metadata:r})}addChild(a){this.children.push(a)}toString(a=0){const r="	".repeat(a),o=this.metadata.map(l=>{const h=l.key,u=l.value;if(Array.isArray(u)){const c=[];return c.push(`${h} = {`),u.forEach(P=>{c.push(`${r}		${P}`)}),c.push(`${r}	}`),c.join(`
 `)}else return`${h} = ${u}`}),e=o.length?` (
 ${o.map(l=>`${r}	${l}`).join(`
 `)}
