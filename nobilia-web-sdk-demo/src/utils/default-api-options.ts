@@ -31,9 +31,9 @@ export default {
      * will have CORS issues
      */
 
-    // baseUrl:
-    //   'https://europe-west3-rml-showcases.cloudfunctions.net/proxy_request?url=',
-    baseUrl: 'http://localhost:8080/proxy_request?url=',
+    baseUrl:
+      'https://europe-west3-rml-showcases.cloudfunctions.net/proxy_request?url=',
+    // baseUrl: 'http://localhost:8080/proxy_request?url=',
     endpointUrl: 'https://connect.homag.com/',
 
     /**
