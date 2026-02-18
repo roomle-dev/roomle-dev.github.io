@@ -1,3 +1,9 @@
+import { type HiApiOptions } from '@roomle/web-sdk';
+
+export interface TcOptions extends HiApiOptions {
+  libraryId: string;
+}
+
 export default {
   enableArrangementCorrection: true,
   uiConfiguration: {
@@ -16,8 +22,6 @@ export default {
     createDebugGeometry: false
   },
   tecConfigInfo: {
-    baseUrlDebug: 'https://localhost:7125/',
-
     /**
      * If you do not want to use the proxy provided by Roomle
      * uncomment the next three lines and comment the line
@@ -26,6 +30,10 @@ export default {
      * only works if you're requesting from localhost:3100 otherwise you
      * will have CORS issues
      */
+
+    // baseUrl:
+    //   'https://europe-west3-rml-showcases.cloudfunctions.net/proxy_request?url=',
+    baseUrl: 'http://localhost:8080/proxy_request?url=',
 
     /**
      *  ALERT!
@@ -41,26 +49,21 @@ export default {
     * This credential overriding should only be used in testing and not on production, see above.
     */
 
+    language: 'en-US,en', // en-US,en  de-DE,de
 
-    // baseUrl: "https://connect.homag.com/",
-    subscriptionId: "a", // <your subscription id here> // NEVER PUT THESE IN FRONTEND PRODUCTION CODE
-    key: "b", // <your tapio key id here> // NEVER PUT THESE IN FRONTEND PRODUCTION CODE
-
-    /** comment this line if you do not want to use the Roomle proxy  */
-    // localUrl: 'https://localhost:7125/',
-
-    baseUrl:
-      'https://europe-west3-rml-showcases.cloudfunctions.net/proxy_request?url=',
+    subscriptionId: 'e2fe8b3d-da31-4a20-92ab-ab6e3839300e', // <your subscription id here> // NEVER PUT THESE IN FRONTEND PRODUCTION CODE
+    libraryId: 'nobilia_Minifabrik',
 
     // OM means order-manager
-    // These are empty because they are inserted by the roomle proxy for this demo.
     om: {
       subscriptionId: '', // <your subscription id here> // NEVER PUT THESE IN FRONTEND PRODUCTION CODE
       key: '', // <your tapio key id here> // NEVER PUT THESE IN FRONTEND PRODUCTION CODE
       importBaseUrl: 'https://connect.homag.com'
     },
-
-    // Your library ID here
-    libraryId: 'nobilia_Minifabrik'
-  }
+  } as TcOptions,
 };
+
+
+
+
+

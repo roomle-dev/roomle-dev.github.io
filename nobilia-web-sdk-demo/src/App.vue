@@ -22,8 +22,8 @@ import apiOptions from './utils/default-api-options';
 import {onMounted, reactive} from "vue";
 import {calculateTotalSum, getQueryParam} from "./utils/helpers";
 import GitHubLink from "../../shared/components/GitHubLink.vue";
-import { omPostRequest } from "./utils/loader";
 import {setupHi} from "@roomle/embedding-lib/hi";
+import {libLoadArticleCatalog, libLoadCalcScript, libLoadMasterData, omPostRequest} from "./utils/hi-requests.ts";
 
 const LS_KEY = 'nobilia-demo-settings';
 
@@ -84,134 +84,6 @@ const FAKE_ROOT_TAG = 'external:root-tag';
 
 // Methods
 
-const HOMAG_INTELLIGENCE_ENDPOINT =
-  'https://europe-west3-rml-showcases.cloudfunctions.net/proxy_request?url=';
-  // 'http://localhost:8080/proxy_request?url=';
-
-interface HomagIntelligenceInitData {
-  libraryId: string;
-  serverOptions?: ApiOptions;
-  debugLogging?: boolean;
-}
-
-interface OrderManagerOptions {
-  key?: string;
-  importBaseUrl?: string;
-}
-
-interface ApiOptions {
-  subscriptionId: string;
-  key: string;
-  om?: OrderManagerOptions;
-  endpointUrl?: string;
-  localUrl?: string;
-  language?: string;
-}
-
-const fetchDataWithAuthorization = async (
-  url: string,
-  type: 'json' | 'text',
-  apiOptions: ApiOptions,
-  debug: { property: string } = { property: 'default' },
-) => {
-  const authorizationHeaders = {
-    headers: {
-      'Content-Type': type === 'json' ? 'application/json' : 'text/plain',
-      'Access-Control-Allow-Origin': '*',
-    },
-  };
-  if (apiOptions.language) {
-    (authorizationHeaders.headers as any)['accept-language'] =
-      apiOptions.language;
-  }
-  try {
-    const startTime = performance.now();
-    const { subscriptionId, endpointUrl, key } = apiOptions;
-    // const key = ''; //_key;
-    const response = await fetch(
-      HOMAG_INTELLIGENCE_ENDPOINT +
-        encodeURIComponent(url) +
-        `&subscriptionId=${encodeURIComponent(subscriptionId)}` +
-        (key ? `&apiKey=${encodeURIComponent(key)}` : '') +
-        (endpointUrl ? `&baseUrl=${encodeURIComponent(endpointUrl)}` : '') /*+ '&nobiliaHack=true'*/,
-      authorizationHeaders,
-    );
-    const endTime = performance.now();
-    const fetchTime = endTime - startTime; // Calculate the fetch time
-
-    if (!response.ok) {
-      console.warn(`Failed to fetch data from ${debug.property}`);
-      throw new Error(
-        `Failed to fetch data from ${url}: ${response.statusText}`,
-      );
-    }
-    console.info(`Success to fetch data from ${debug.property}`);
-    console.info(
-      `The data for ${debug.property} was fetched in ${fetchTime} milliseconds`,
-    );
-
-    return response;
-  } catch (error) {
-    console.warn(`Failed to fetch data from ${debug.property}`);
-    console.error(error);
-    throw error;
-  }
-};
-
-const loadArticleCatalog = async (
-  apiOptions: HomagIntelligenceInitData,
-) => {
-  const { libraryId, serverOptions } = apiOptions;
-  // NOBILIA DEMO HACKS
-  const endpoint = libraryId.includes('nobilia')
-    ? `api/pos/libraries/${libraryId}/articles`
-    : `api/pos/articles?libraryId=${libraryId}`;
-  const articlesCatalog = await fetchDataWithAuthorization(
-    endpoint,
-    'json',
-    serverOptions as ApiOptions,
-    { property: 'articles' },
-  );
-  return await articlesCatalog.json();
-};
-
-const loadMasterData = async (
-  apiOptions: HomagIntelligenceInitData,
-) => {
-  const libraryId = apiOptions.libraryId;
-  const serverOptions = apiOptions.serverOptions as ApiOptions;
-  // NOBILIA DEMO HACKS
-  const endpoint = libraryId.includes('nobilia')
-    ? `api/pos/libraries/${libraryId}/masterData`
-    : `api/pos/masterData?libraryId=${libraryId}`;
-  const masterData = await fetchDataWithAuthorization(
-    endpoint,
-    'json',
-    serverOptions,
-    { property: 'masterData' },
-  );
-  return (await masterData.json()) as any;
-};
-
-const loadCalcScript = async (
-  apiOptions: HomagIntelligenceInitData,
-) => {
-  const libraryId = apiOptions.libraryId;
-  const serverOptions = apiOptions.serverOptions as ApiOptions;
-  // NOBILIA DEMO HACKS
-  const url = libraryId.includes('nobilia')
-    ? `api/pos/libraries/${libraryId}/calc.js`
-    : 'api/pos/calc.js?libraryId=' + encodeURIComponent(libraryId);
-  const response = await fetchDataWithAuthorization(url, 'text', serverOptions, {
-    property: 'calc.js',
-  });
-  let jsCode = await response.text();
-  if (!jsCode) {
-    throw new Error('Script load error');
-  }
-  return jsCode;
-};
-
 const onRequestPlan = (roomDesignerApi: any) => {
   roomDesignerApi.extended.sendToOM(true);
 }
@@ -228,12 +100,14 @@ const startRoomlePlanner = async () => {
   saveSettings(settings);
 
   const planId =
-      getQueryParam('plan_id') ?? 'ps_8jjg0zezlblb48vzn8qas9vwwn7fqbg';
-  const debugMode = (getQueryParam('debug') ?? 'false') === 'true';
+      'ps_8jjg0zezlblb48vzn8qas9vwwn7fqbg';
+  const debugMode = false;
   const libraryId =
-      getQueryParam('library_id') ?? apiOptions.tecConfigInfo.libraryId;
+      apiOptions.tecConfigInfo.libraryId;
 
+  apiOptions.tecConfigInfo.language = settings.locale;
   apiOptions.tecConfigInfo.libraryId = libraryId;
+  apiOptions.tecConfigInfo.subscriptionId = settings.subscriptionId;
   apiOptions.uiConfiguration.userRight = settings.userRight;
 
   const options = {
@@ -263,16 +137,9 @@ const startRoomlePlanner = async () => {
     },
     autoStart: true,
     hi: {
-      libraryId: apiOptions.tecConfigInfo.libraryId,
-      serverOptions: {
-        language: settings.locale,
-        key: apiOptions.tecConfigInfo.libraryId,
-        subscriptionId: settings.subscriptionId || apiOptions.tecConfigInfo.om.subscriptionId,
-        om: {
-          key: apiOptions.tecConfigInfo.om.key,
-          importBaseUrl: apiOptions.tecConfigInfo.om.importBaseUrl,
-        },
-      },
+      language: apiOptions.tecConfigInfo.language,
+      serverOptions: apiOptions.tecConfigInfo,
+      libraryId: apiOptions.tecConfigInfo.libraryId
     },
     externalObjectSettings: apiOptions,
   };
@@ -282,9 +149,9 @@ const startRoomlePlanner = async () => {
   }
 
   await setupHi(options.hi, {
-    onLoadJavascript: (_libraryId: string) => loadCalcScript(options.hi),
-    onLoadArticleCatalog: (_libraryId: string) => loadArticleCatalog(options.hi),
-    onLoadMasterData: (_libraryId: string) => loadMasterData(options.hi),
+    onLoadJavascript: (_libraryId: string) => libLoadCalcScript(options.hi),
+    onLoadArticleCatalog: (_libraryId: string) => libLoadArticleCatalog(options.hi),
+    onLoadMasterData: (_libraryId: string) => libLoadMasterData(options.hi),
     onPlaceOrder: async (orderData: any) => {
       const dataStr = JSON.stringify(orderData, null, 2);
       const blob = new Blob([dataStr], { type: 'application/json' });
