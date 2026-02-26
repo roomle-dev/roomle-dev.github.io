@@ -19,6 +19,20 @@ function promptProjectName() {
     });
 }
 
+function promptDescription() {
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+
+    return new Promise((resolve) => {
+        rl.question('Project description: ', (answer) => {
+            rl.close();
+            resolve(answer.trim());
+        });
+    });
+}
+
 async function waitForFile(filePath, timeout = 30000, interval = 500) {
     const startTime = Date.now();
 
@@ -105,6 +119,8 @@ async function createNew() {
             process.exit(1);
         }
 
+        const description = await promptDescription();
+
         console.log(`\nCreating project: ${projectName}`);
 
         // Read package.json
@@ -152,44 +168,70 @@ async function createNew() {
                 return;
             }
 
-            // Now wait for any vite config file
-            const configPaths = [
-                path.join(projectName, 'vite.config.ts'),
-                path.join(projectName, 'vite.config.js'),
-                path.join(projectName, 'vite.config.mts'),
-                path.join(projectName, 'vite.config.mjs')
-            ];
+            // Run vite config patching and package.json description update in parallel
+            await Promise.all([
+                // Patch vite config with base path
+                (async () => {
+                    const configPaths = [
+                        path.join(projectName, 'vite.config.ts'),
+                        path.join(projectName, 'vite.config.js'),
+                        path.join(projectName, 'vite.config.mts'),
+                        path.join(projectName, 'vite.config.mjs')
+                    ];
 
-            let foundConfig = false;
-            for (const configPath of configPaths) {
-                if (await waitForFile(configPath, 30000)) {
-                    foundConfig = true;
-                    // Wait a tiny bit to ensure file is fully written
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                    await addBaseToViteConfig(projectName);
-                    break;
-                }
-            }
+                    let foundConfig = false;
+                    for (const configPath of configPaths) {
+                        if (await waitForFile(configPath, 30000)) {
+                            foundConfig = true;
+                            // Wait a tiny bit to ensure file is fully written
+                            await new Promise(resolve => setTimeout(resolve, 500));
+                            await addBaseToViteConfig(projectName);
+                            break;
+                        }
+                    }
 
-            if (!foundConfig) {
-                console.warn('\nWarning: Vite config file not found within timeout');
-                console.log('Creating vite.config.js with base configuration...');
+                    if (!foundConfig) {
+                        console.warn('\nWarning: Vite config file not found within timeout');
+                        console.log('Creating vite.config.js with base configuration...');
 
-                const configPath = path.join(projectName, 'vite.config.js');
-                const configContent = `import { defineConfig } from 'vite'
+                        const configPath = path.join(projectName, 'vite.config.js');
+                        const configContent = `import { defineConfig } from 'vite'
 
 export default defineConfig({
   base: '/${projectName}/'
 })
 `;
 
-                try {
-                    await fs.writeFile(configPath, configContent, 'utf-8');
-                    console.log(`✓ Created vite.config.js with base: '/${projectName}/'`);
-                } catch (err) {
-                    console.error('Error creating vite.config.js:', err.message);
-                }
-            }
+                        try {
+                            await fs.writeFile(configPath, configContent, 'utf-8');
+                            console.log(`✓ Created vite.config.js with base: '/${projectName}/'`);
+                        } catch (err) {
+                            console.error('Error creating vite.config.js:', err.message);
+                        }
+                    }
+                })(),
+
+                // Wait for project package.json then set description
+                (async () => {
+                    if (!description) return;
+                    const projectPackageJsonPath = path.join(projectName, 'package.json');
+                    const found = await waitForFile(projectPackageJsonPath, 30000);
+                    if (!found) {
+                        console.warn(`\nWarning: ${projectName}/package.json not found within timeout`);
+                        return;
+                    }
+                    // Small buffer to ensure the file is fully written
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                    try {
+                        const pkg = JSON.parse(await fs.readFile(projectPackageJsonPath, 'utf-8'));
+                        pkg.description = description;
+                        await fs.writeFile(projectPackageJsonPath, JSON.stringify(pkg, null, 2) + '\n', 'utf-8');
+                        console.log(`✓ Added description to ${projectName}/package.json`);
+                    } catch (err) {
+                        console.warn(`Warning: Could not update ${projectName}/package.json:`, err.message);
+                    }
+                })()
+            ]);
         })();
 
         // Wait for the child process to complete or handle it running indefinitely
