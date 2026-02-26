@@ -38,5 +38,9 @@ features:
     details: Configurator implementation with the roomle embedding lib in plain Javascript
     link: https://github.com/roomle-dev/roomle-dev.github.io/tree/master/configurator-embedding-example
     target: '_blank'
+  - title: cdn-embedding-example
+    details: Example of loading the embedding-lib through unpkg and jsdelivr CDNs.
+    link: https://github.com/roomle-dev/roomle-dev.github.io/tree/master/cdn-embedding-example
+    target: '_blank'
 ---
 
