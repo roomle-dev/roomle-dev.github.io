@@ -21,7 +21,8 @@
     "tc-export-demo",
     "nobilia-web-sdk-demo",
     "glb-viewer-example",
-    "configurator-embedding-example"
+    "configurator-embedding-example",
+    "cdn-embedding-example"
   ],
   "devDependencies": {
     "create-vite": "^5.5.3",
