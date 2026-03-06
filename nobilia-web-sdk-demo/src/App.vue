@@ -119,7 +119,7 @@ const onRequestPlan = (roomDesignerApi: any) => {
 
 const doPriceCalculation = async (roomDesignerApi: any) => {
   const priceData = await roomDesignerApi.extended.fetchPrice();
-  const calculatedPrice = calculateTotalSum(priceData.orderData);
+  const calculatedPrice = calculateTotalSum(priceData?.orderData);
 
   roomDesignerApi.ui.setPrice('€', calculatedPrice);
 }
@@ -195,6 +195,12 @@ const startRoomlePlanner = async () => {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     },
+    onPosGroupsCompletelyLoaded: () => {
+      doPriceCalculation(instance);
+    },
+    onPriceCalc: () => {
+      doPriceCalculation(instance);
+    },
     onFetchPrice: async (orderData: any) => {
       const useNobiliaHack = libraryId.includes('nobilia');
       const requestHeader = {
@@ -217,18 +223,6 @@ const startRoomlePlanner = async () => {
 
   await instance.ui.loadObject(planId);
 
-  instance.extended.callbacks.onCompletelyLoaded = () => {
-    doPriceCalculation(instance);
-  };
-  instance.ui.callbacks.onPlanElementAdded = () => {
-    doPriceCalculation(instance);
-  };
-  instance.ui.callbacks.onPlanElementChanged = () => {
-    doPriceCalculation(instance);
-  };
-  instance.ui.callbacks.onPlanElementRemoved = () => {
-    doPriceCalculation(instance);
-  };
   instance.ui.callbacks.onRequestPlan = async () => {
     onRequestPlan(instance);
   };
