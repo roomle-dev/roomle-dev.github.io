@@ -1,34 +1,36 @@
 <template>
   <GitHubLink :position="'top right'" :link="'https://github.com/roomle-dev/roomle-dev.github.io/tree/master/nobilia-web-sdk-demo'" />
   <div id="settings-bar">
-    <details id="settings-details">
-      <summary>Information</summary>
-      <div>
-        <h4>Testing Credentials</h4>
-        <p>The proxy used in this demo will use placeholder credentials <b>(API Key, Library ID, Subscription ID, Endpoint URL)</b> by default.</p>
-        <p>Entering a value into any of the corresponding fields will tell the demo proxy to use the credential you supplied instead.</p>
-      </div>
-    </details>
-    <label for="locale-select">Locale:</label>
-    <select id="locale-select" v-model="settings.locale">
-      <option value="en-US,en">en-US,en</option>
-      <option value="de-DE,de">de-DE,de</option>
-    </select>
-    <label for="api-key-input">API Key:</label>
-    <input type="text" id="api-key-input" v-model="settings.apiKey" placeholder="API Key" />
-    <label for="library-id-input">Library ID:</label>
-    <input type="text" id="library-id-input" v-model="settings.libraryId" placeholder="Library ID" />
-    <label for="subscription-id-input">Subscription ID:</label>
-    <input type="text" id="subscription-id-input" v-model="settings.subscriptionId" placeholder="Subscription ID" />
-    <label for="endpoint-url-input">Endpoint URL:</label>
-    <input type="text" id="endpoint-url-input" v-model="settings.endpointUrl" placeholder="https://connect.homag.com/" />
-    <label for="user-right-select">Parameter Level:</label>
-    <select id="user-right-select" v-model="settings.userRight">
-      <option value="Simple">Simple</option>
-      <option value="Advanced">Advanced</option>
-      <option value="Master">Master</option>
-    </select>
-    <button id="reload-settings" @click="reloadWithSettings">Reload</button>
+    <div id="settings-fields">
+      <details id="settings-details">
+        <summary>Information</summary>
+        <div>
+          <h4>Testing Credentials</h4>
+          <p>The proxy used in this demo will use placeholder credentials <b>(API Key, Library ID, Subscription ID, Endpoint URL)</b> by default.</p>
+          <p>Entering a value into any of the corresponding fields will tell the demo proxy to use the credential you supplied instead.</p>
+        </div>
+      </details>
+      <label for="locale-select">Locale:</label>
+      <select id="locale-select" v-model="settings.locale">
+        <option value="en-US,en">en-US,en</option>
+        <option value="de-DE,de">de-DE,de</option>
+      </select>
+      <label for="api-key-input">API Key:</label>
+      <input type="text" id="api-key-input" v-model="settings.apiKey" placeholder="API Key" />
+      <label for="library-id-input">Library ID:</label>
+      <input type="text" id="library-id-input" v-model="settings.libraryId" placeholder="Library ID" />
+      <label for="subscription-id-input">Subscription ID:</label>
+      <input type="text" id="subscription-id-input" v-model="settings.subscriptionId" placeholder="Subscription ID" />
+      <label for="endpoint-url-input">Endpoint URL:</label>
+      <input type="text" id="endpoint-url-input" v-model="settings.endpointUrl" placeholder="https://connect.homag.com/" />
+      <label for="user-right-select">Parameter Level:</label>
+      <select id="user-right-select" v-model="settings.userRight">
+        <option value="Simple">Simple</option>
+        <option value="Advanced">Advanced</option>
+        <option value="Master">Master</option>
+      </select>
+      <button id="reload-settings" @click="reloadWithSettings">Reload</button>
+    </div>
     <button id="generate-with-ai" :disabled="!roomlePlanner || isGeneratingWithAi" @click="generateWithAi">Generate with AI</button>
   </div>
   <div id="container"></div>
@@ -302,7 +304,15 @@ onMounted(() => startRoomlePlanner())
   font-family: sans-serif;
   font-size: 13px;
   gap: 0.5rem;
+}
+
+#settings-fields {
+  display: flex;
+  flex: 1;
   flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
 }
 
 #settings-bar label {
@@ -314,13 +324,20 @@ onMounted(() => startRoomlePlanner())
   padding: 0.25rem 0.4rem;
 }
 
+/* The inputs start narrow so the bar fits on one line, then grow into the free space. */
+#settings-bar input {
+  flex: 1 1 3.5rem;
+  min-width: 0;
+  max-width: 9rem;
+}
+
 #settings-bar button {
   padding: 0.25rem 0.75rem;
   cursor: pointer;
 }
 
 #generate-with-ai {
-  margin-left: auto;
+  flex: none;
 }
 
 #container {
