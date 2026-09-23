@@ -29,6 +29,7 @@
       <option value="Master">Master</option>
     </select>
     <button id="reload-settings" @click="reloadWithSettings">Reload</button>
+    <button id="generate-with-ai" :disabled="!roomlePlanner || isGeneratingWithAi" @click="generateWithAi">Generate with AI</button>
   </div>
   <div id="container"></div>
 </template>
@@ -36,7 +37,7 @@
 <script setup lang="ts">
 import RoomleEmbeddingApi from "@roomle/embedding-lib";
 import apiOptions from './utils/default-api-options';
-import {onMounted, reactive} from "vue";
+import {onMounted, reactive, ref, shallowRef} from "vue";
 import {calculateTotalSum, getQueryParam} from "./utils/helpers";
 import GitHubLink from "../../shared/components/GitHubLink.vue";
 import {setupHi} from "@roomle/embedding-lib/hi";
@@ -111,7 +112,60 @@ const createExtObjId = (id: string): ExtObjId => `${EXTERNAL_ID_PREFIX}${id}`;
 
 const FAKE_ROOT_TAG = 'external:root-tag';
 
+// The AI endpoint answers no CORS preflight, so the request goes through the demo proxy.
+// The placeholder credentials keep the proxy from forwarding its own HOMAG credentials.
+const AI_KITCHEN_GENERATION_URL = `https://europe-west3-rml-showcases.cloudfunctions.net/proxy_request?${new URLSearchParams({
+  url: 'v1/generate?subscription-key=06c920100e1645cd8d8095366d9a48d1',
+  baseUrl: 'https://apim-aiplanner-ki-stage.azure-api.net/',
+  subscriptionId: 'a',
+  apiKey: 'b',
+})}`;
+
+// The default "idm" catalogue plans with articles the nobilia demo library does not contain.
+const AI_KITCHEN_GENERATION_REQUEST = {
+  metaData: { catalogue: { id: 'elements' } },
+};
+
+const roomlePlanner = shallowRef<any>(null);
+const isGeneratingWithAi = ref(false);
+
 // Methods
+
+const fetchAiKitchenLayout = async () => {
+  const response = await fetch(AI_KITCHEN_GENERATION_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(AI_KITCHEN_GENERATION_REQUEST),
+  });
+  if (!response.ok) {
+    throw new Error(`Kitchen generation failed with status ${response.status}`);
+  }
+  return await response.json();
+}
+
+const removeExternalObjectGroups = async (roomDesignerApi: any) => {
+  const groups = await roomDesignerApi.extended.getExternalObjectGroups();
+  for (const group of groups) {
+    await roomDesignerApi.extended.removeExternalObject(group.id);
+  }
+}
+
+const generateWithAi = async () => {
+  isGeneratingWithAi.value = true;
+  try {
+    const [articleLayoutJson] = await Promise.all([
+      fetchAiKitchenLayout(),
+      removeExternalObjectGroups(roomlePlanner.value),
+    ]);
+    await roomlePlanner.value.extended.loadExternalObjectGroupLayout(articleLayoutJson, 'nobila', {
+      findFreeSpaceInPlan: true,
+    });
+  } catch (error) {
+    console.error(error);
+  } finally {
+    isGeneratingWithAi.value = false;
+  }
+}
 
 const onRequestPlan = (roomDesignerApi: any) => {
   roomDesignerApi.extended.sendToOM(true);
@@ -228,6 +282,7 @@ const startRoomlePlanner = async () => {
   };
 
   (window as any).instance = instance;
+  roomlePlanner.value = instance;
 }
 
 // Hooks
@@ -240,7 +295,8 @@ onMounted(() => startRoomlePlanner())
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0.5rem 1rem;
+  /* The right padding keeps the bar clear of the GitHub link fixed at the top right. */
+  padding: 0.5rem 9rem 0.5rem 1rem;
   background: #f0f0f0;
   border-bottom: 1px solid #ccc;
   font-family: sans-serif;
@@ -263,9 +319,13 @@ onMounted(() => startRoomlePlanner())
   cursor: pointer;
 }
 
+#generate-with-ai {
+  margin-left: auto;
+}
+
 #container {
-  height: calc(100vh - 42px);
-  width: 100vw;
+  flex: 1;
+  min-height: 0;
 }
 
 #settings-details {
