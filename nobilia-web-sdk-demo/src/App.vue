@@ -1,34 +1,37 @@
 <template>
   <GitHubLink :position="'top right'" :link="'https://github.com/roomle-dev/roomle-dev.github.io/tree/master/nobilia-web-sdk-demo'" />
   <div id="settings-bar">
-    <details id="settings-details">
-      <summary>Information</summary>
-      <div>
-        <h4>Testing Credentials</h4>
-        <p>The proxy used in this demo will use placeholder credentials <b>(API Key, Library ID, Subscription ID, Endpoint URL)</b> by default.</p>
-        <p>Entering a value into any of the corresponding fields will tell the demo proxy to use the credential you supplied instead.</p>
-      </div>
-    </details>
-    <label for="locale-select">Locale:</label>
-    <select id="locale-select" v-model="settings.locale">
-      <option value="en-US,en">en-US,en</option>
-      <option value="de-DE,de">de-DE,de</option>
-    </select>
-    <label for="api-key-input">API Key:</label>
-    <input type="text" id="api-key-input" v-model="settings.apiKey" placeholder="API Key" />
-    <label for="library-id-input">Library ID:</label>
-    <input type="text" id="library-id-input" v-model="settings.libraryId" placeholder="Library ID" />
-    <label for="subscription-id-input">Subscription ID:</label>
-    <input type="text" id="subscription-id-input" v-model="settings.subscriptionId" placeholder="Subscription ID" />
-    <label for="endpoint-url-input">Endpoint URL:</label>
-    <input type="text" id="endpoint-url-input" v-model="settings.endpointUrl" placeholder="https://connect.homag.com/" />
-    <label for="user-right-select">Parameter Level:</label>
-    <select id="user-right-select" v-model="settings.userRight">
-      <option value="Simple">Simple</option>
-      <option value="Advanced">Advanced</option>
-      <option value="Master">Master</option>
-    </select>
-    <button id="reload-settings" @click="reloadWithSettings">Reload</button>
+    <div id="settings-fields">
+      <details id="settings-details">
+        <summary>Information</summary>
+        <div>
+          <h4>Testing Credentials</h4>
+          <p>The proxy used in this demo will use placeholder credentials <b>(API Key, Library ID, Subscription ID, Endpoint URL)</b> by default.</p>
+          <p>Entering a value into any of the corresponding fields will tell the demo proxy to use the credential you supplied instead.</p>
+        </div>
+      </details>
+      <label for="locale-select">Locale:</label>
+      <select id="locale-select" v-model="settings.locale">
+        <option value="en-US,en">en-US,en</option>
+        <option value="de-DE,de">de-DE,de</option>
+      </select>
+      <label for="api-key-input">API Key:</label>
+      <input type="text" id="api-key-input" v-model="settings.apiKey" placeholder="API Key" />
+      <label for="library-id-input">Library ID:</label>
+      <input type="text" id="library-id-input" v-model="settings.libraryId" placeholder="Library ID" />
+      <label for="subscription-id-input">Subscription ID:</label>
+      <input type="text" id="subscription-id-input" v-model="settings.subscriptionId" placeholder="Subscription ID" />
+      <label for="endpoint-url-input">Endpoint URL:</label>
+      <input type="text" id="endpoint-url-input" v-model="settings.endpointUrl" placeholder="https://connect.homag.com/" />
+      <label for="user-right-select">Parameter Level:</label>
+      <select id="user-right-select" v-model="settings.userRight">
+        <option value="Simple">Simple</option>
+        <option value="Advanced">Advanced</option>
+        <option value="Master">Master</option>
+      </select>
+      <button id="reload-settings" @click="reloadWithSettings">Reload</button>
+    </div>
+    <button id="generate-with-ai" :disabled="!roomlePlanner || isGeneratingWithAi" @click="generateWithAi">Generate with AI</button>
   </div>
   <div id="container"></div>
 </template>
@@ -36,7 +39,7 @@
 <script setup lang="ts">
 import RoomleEmbeddingApi from "@roomle/embedding-lib";
 import apiOptions from './utils/default-api-options';
-import {onMounted, reactive} from "vue";
+import {onMounted, reactive, ref, shallowRef} from "vue";
 import {calculateTotalSum, getQueryParam} from "./utils/helpers";
 import GitHubLink from "../../shared/components/GitHubLink.vue";
 import {setupHi} from "@roomle/embedding-lib/hi";
@@ -111,7 +114,60 @@ const createExtObjId = (id: string): ExtObjId => `${EXTERNAL_ID_PREFIX}${id}`;
 
 const FAKE_ROOT_TAG = 'external:root-tag';
 
+// The AI endpoint answers no CORS preflight, so the request goes through the demo proxy.
+// The placeholder credentials keep the proxy from forwarding its own HOMAG credentials.
+const AI_KITCHEN_GENERATION_URL = `https://europe-west3-rml-showcases.cloudfunctions.net/proxy_request?${new URLSearchParams({
+  url: 'v1/generate?subscription-key=06c920100e1645cd8d8095366d9a48d1',
+  baseUrl: 'https://apim-aiplanner-ki-stage.azure-api.net/',
+  subscriptionId: 'a',
+  apiKey: 'b',
+})}`;
+
+// The default "idm" catalogue plans with articles the nobilia demo library does not contain.
+const AI_KITCHEN_GENERATION_REQUEST = {
+  metaData: { catalogue: { id: 'elements' } },
+};
+
+const roomlePlanner = shallowRef<any>(null);
+const isGeneratingWithAi = ref(false);
+
 // Methods
+
+const fetchAiKitchenLayout = async () => {
+  const response = await fetch(AI_KITCHEN_GENERATION_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(AI_KITCHEN_GENERATION_REQUEST),
+  });
+  if (!response.ok) {
+    throw new Error(`Kitchen generation failed with status ${response.status}`);
+  }
+  return await response.json();
+}
+
+const removeExternalObjectGroups = async (roomDesignerApi: any) => {
+  const groups = await roomDesignerApi.extended.getExternalObjectGroups();
+  for (const group of groups) {
+    await roomDesignerApi.extended.removeExternalObject(group.id);
+  }
+}
+
+const generateWithAi = async () => {
+  isGeneratingWithAi.value = true;
+  try {
+    const [articleLayoutJson] = await Promise.all([
+      fetchAiKitchenLayout(),
+      removeExternalObjectGroups(roomlePlanner.value),
+    ]);
+    await roomlePlanner.value.extended.loadExternalObjectGroupLayout(articleLayoutJson, 'nobila', {
+      findFreeSpaceInPlan: true,
+    });
+  } catch (error) {
+    console.error(error);
+  } finally {
+    isGeneratingWithAi.value = false;
+  }
+}
 
 const onRequestPlan = (roomDesignerApi: any) => {
   roomDesignerApi.extended.sendToOM(true);
@@ -228,6 +284,7 @@ const startRoomlePlanner = async () => {
   };
 
   (window as any).instance = instance;
+  roomlePlanner.value = instance;
 }
 
 // Hooks
@@ -240,13 +297,22 @@ onMounted(() => startRoomlePlanner())
   position: relative;
   display: flex;
   align-items: center;
-  padding: 0.5rem 1rem;
+  /* The right padding keeps the bar clear of the GitHub link fixed at the top right. */
+  padding: 0.5rem 9rem 0.5rem 1rem;
   background: #f0f0f0;
   border-bottom: 1px solid #ccc;
   font-family: sans-serif;
   font-size: 13px;
   gap: 0.5rem;
+}
+
+#settings-fields {
+  display: flex;
+  flex: 1;
   flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
 }
 
 #settings-bar label {
@@ -258,14 +324,25 @@ onMounted(() => startRoomlePlanner())
   padding: 0.25rem 0.4rem;
 }
 
+/* The inputs start narrow so the bar fits on one line, then grow into the free space. */
+#settings-bar input {
+  flex: 1 1 3.5rem;
+  min-width: 0;
+  max-width: 9rem;
+}
+
 #settings-bar button {
   padding: 0.25rem 0.75rem;
   cursor: pointer;
 }
 
+#generate-with-ai {
+  flex: none;
+}
+
 #container {
-  height: calc(100vh - 42px);
-  width: 100vw;
+  flex: 1;
+  min-height: 0;
 }
 
 #settings-details {
